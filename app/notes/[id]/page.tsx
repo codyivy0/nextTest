@@ -2,7 +2,7 @@ import styles from "../Notes.module.css";
 
 async function getNote(noteId: string) {
   const res = await fetch(
-    `http://127.0.0.1:8090/api/collections/posts/records/${noteId}`,
+    `https://mile-liquid.pockethost.io/api/collections/posts/records/${noteId}`,
     { next: { revalidate: 10 } }
   );
   const data = await res.json();

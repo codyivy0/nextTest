@@ -10,15 +10,19 @@ const CreateNote = () => {
   const router = useRouter();
 
   async function create() {
-    await fetch(`http://127.0.0.1:8090/api/collections/posts/records/`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, content }),
-    });
+    await fetch(
+      `https://mile-liquid.pockethost.io/api/collections/posts/records/`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title, content }),
+      }
+    );
     setTitle("");
     setContent("");
-
-    router.refresh();
+    setTimeout(() => {
+      router.refresh();
+    }, 3000);
   }
   return (
     <div>
