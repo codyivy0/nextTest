@@ -2,18 +2,18 @@ import Link from "next/link";
 import styles from "./Notes.module.css";
 import CreateNote from "./CreateNote";
 import PocketBase from "pocketbase";
-// @ts-nocheck
 
 const pb = new PocketBase("https://mile-liquid.pockethost.io");
+pb.autoCancellation(false)
 
 async function getNotes() {
-  const res = await fetch(
-    "https://mile-liquid.pockethost.io/api/collections/posts/records?page=1&perPage=30",
-    { cache: "no-store" }
-  );
-  const data = await res.json();
 
-  return data?.items as any[];
+  const data = await pb.collection("posts").getFullList({
+    sort: "-created",
+    cache: "no-store",
+  });
+
+  return data;
 }
 
 export default async function NotesPage() {

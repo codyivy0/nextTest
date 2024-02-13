@@ -1,7 +1,10 @@
 "use client";
-
+import PocketBase from "pocketbase";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { FormEvent } from "react";
+
+const pb = new PocketBase("https://mile-liquid.pockethost.io");
 
 const CreateNote = () => {
   const [title, setTitle] = useState("");
@@ -9,21 +12,17 @@ const CreateNote = () => {
 
   const router = useRouter();
 
-  async function create() {
-    await fetch(
-      `https://mile-liquid.pockethost.io/api/collections/posts/records/`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, content }),
-      }
-    );
+  async function create(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const data = { title, content };
+
+    console.log(data);
+    await pb.collection("posts").create(data);
     setTitle("");
     setContent("");
-    setTimeout(() => {
-      router.refresh();
-    }, 3000);
+    router.refresh();
   }
+
   return (
     <div>
       <h3>Create New Note:</h3>

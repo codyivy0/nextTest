@@ -1,13 +1,15 @@
+import DeleteNote from "../DeleteNote";
 import styles from "../Notes.module.css";
+import PocketBase from "pocketbase";
+
+const pb = new PocketBase("https://mile-liquid.pockethost.io");
+pb.autoCancellation(false);
 
 async function getNote(noteId: string) {
-  const res = await fetch(
-    `https://mile-liquid.pockethost.io/api/collections/posts/records/${noteId}`,
-    { next: { revalidate: 10 } }
-  );
-  const data = await res.json();
-  return data;
+  const record = await pb.collection("posts").getOne(noteId);
+  return record;
 }
+
 
 export default async function NotePage({ params }: any) {
   const note = await getNote(params.id);
@@ -19,6 +21,7 @@ export default async function NotePage({ params }: any) {
         <h5>{note.content}</h5>
         <p>{note.created}</p>
       </div>
+      <DeleteNote id={note.id}/>
     </div>
   );
 }
